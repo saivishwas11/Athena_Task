@@ -139,72 +139,54 @@ def invoke_llm(messages: List[Any], temperature: float = 0.0):
 # Backwards-compatible function used by sharks in some versions
 def run_shark_persona(name: str, style: str, transcript: str, delivery_score: float, content_analysis: Dict[str, Any]):
     """
-    Simple adapter to call the LLM for a shark persona using Gemini API.
+    Adapter to call Groq LLM for a shark persona, matching the main agent logic.
     Returns parsed JSON if possible, otherwise returns a fallback dict.
     """
     try:
-        # Configure Gemini
-        import google.generativeai as genai
-        api_key = os.getenv("GEMINI_API_KEY")
-        if not api_key:
-            logger.warning("GEMINI_API_KEY not set, falling back to dummy response")
-            return get_dummy_response(name)
-            
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel('gemini-1.5-pro')
-        
-        # Prepare content summary
         content_summary = ""
         if content_analysis:
             cs = content_analysis.get("content_score", 0)
             content_summary = f"Content score: {cs}\n"
             if "master_summary" in content_analysis:
                 content_summary += f"Summary: {content_analysis.get('master_summary')}\n"
-        
+
         # Create the prompt
-        system_prompt = f"""You are {name}, a {style} shark on Shark Tank. 
-        Analyze this pitch and provide feedback. Be concise, direct, and in character.
-        Focus on business viability, market potential, and investment potential.
-        
-        Format your response as a JSON object with these fields:
-        - feedback: Your detailed feedback
-        - verdict: "Deal", "No Deal", or "Need More Info"
-        - tips: List of specific suggestions (2-3 items)"""
-        
-        human_text = f"""Pitch Transcript:
-        {transcript[:8000]}  # Truncate to stay within context window
-        
-        Delivery Score: {delivery_score}/100
-        Content Analysis: {content_summary}"""
-        
-        # Generate response
-        response = model.generate_content([
-            {"role": "user", "parts": [system_prompt]},
-            {"role": "model", "parts": ["Understood. I'll analyze the pitch as requested."]},
-            {"role": "user", "parts": [human_text]}
-        ])
-        
-        # Parse response
+        persona_instructions = {
+            "Visionary Shark": "Focus on innovation, market disruption, and long-term growth potential. Identify bold ideas, unique approaches, and future trends.",
+            "Finance Shark": "Focus on numbers, unit economics, margins, profitability, and financial risk. Scrutinize financials, scalability, and capital efficiency.",
+            "Customer Shark": "Focus on product-market fit, user experience, and value proposition. Assess customer pain points, adoption, and satisfaction.",
+            "Skeptic Shark": "Focus on risks, challenges, potential pitfalls, and what could go wrong. Identify weaknesses, gaps, and areas needing more evidence."
+        }
+        persona_blurb = persona_instructions.get(name, style)
+        system_prompt = f"""You are {name}, a {style} shark on Shark Tank.\n{persona_blurb}\n\nAnalyze this pitch and provide feedback in your unique voice. Be concise, direct, and in character.\n\nFormat your response as a JSON object with these fields:\n- feedback: Your detailed feedback\n- verdict: 'Deal', 'No Deal', or 'Need More Info'\n- tips: List of specific suggestions (2-3 items)"""
+
+        human_text = f"""Pitch Transcript:\n{transcript[:8000]}  # Truncate to stay within context window\n\nDelivery Score: {delivery_score}/100\nContent Analysis: {content_summary}"""
+
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": human_text},
+        ]
+        resp = invoke_llm(messages, temperature=0.0)
         try:
-            result = json.loads(response.text)
+            parsed = parse_json_safely(resp.content)
             return {
                 "name": name,
-                "feedback": result.get("feedback", "No feedback provided"),
-                "verdict": result.get("verdict", "Need More Info"),
-                "tips": result.get("tips", [])
+                "feedback": parsed.get("feedback", "No feedback provided"),
+                "verdict": parsed.get("verdict", "Need More Info"),
+                "tips": parsed.get("tips", [])
             }
-        except json.JSONDecodeError:
-            logger.warning("Failed to parse Gemini response as JSON")
+        except Exception:
+            logger.warning("Failed to parse Groq response as JSON")
             return {
                 "name": name,
-                "feedback": response.text[:1000],
+                "feedback": resp.content[:1000],
                 "verdict": "Need More Info",
                 "tips": ["Could not parse response - please review manually"]
             }
-            
     except Exception as e:
-        logger.error(f"Error in Gemini shark analysis: {str(e)}")
+        logger.error(f"Error in Groq shark analysis: {str(e)}")
         return get_dummy_response(name)
+
 
 def get_dummy_response(name: str) -> Dict[str, Any]:
     """Fallback response if analysis fails"""
