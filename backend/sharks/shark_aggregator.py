@@ -1,5 +1,5 @@
 from typing import Dict, Any
-from graph.state_types import PitchState
+from backend.graph.state_types import PitchState
 
 
 def _aggregate_shark_panel(shark_outputs: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:

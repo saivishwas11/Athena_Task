@@ -1,6 +1,6 @@
 import logging
-from graph.state_types import PitchState
-from utils.voice_analysis import analyze_voice
+from backend.graph.state_types import PitchState
+from backend.utils.voice_analysis import analyze_voice
 
 logger = logging.getLogger(__name__)
 

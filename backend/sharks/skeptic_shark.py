@@ -1,5 +1,5 @@
-from graph.state_types import PitchState
-from utils.llm_utils import run_shark_persona
+from backend.graph.state_types import PitchState
+from backend.utils.llm_utils import run_shark_persona
 
 
 def skeptic_shark_node(state: PitchState) -> PitchState:

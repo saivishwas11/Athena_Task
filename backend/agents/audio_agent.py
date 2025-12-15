@@ -5,11 +5,11 @@ from pathlib import Path
 from typing import Any, Tuple, Optional
 
 import numpy as np
-from graph.state_types import PitchState
+from backend.graph.state_types import PitchState
 
 # Import audio processing utilities
 try:
-    from utils.audio_processing import _load_audio_file_to_numpy, extract_audio_from_video
+    from backend.utils.audio_processing import _load_audio_file_to_numpy, extract_audio_from_video
 except ImportError as e:
     raise ImportError(
         "Failed to import audio_processing utils. Make sure all dependencies are installed. "

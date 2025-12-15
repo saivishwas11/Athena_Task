@@ -1,8 +1,8 @@
 import logging
 from typing import Dict, Any, Tuple
 
-from graph.state_types import PitchState
-from utils.llm_utils import invoke_llm, parse_json_safely
+from backend.graph.state_types import PitchState
+from backend.utils.llm_utils import invoke_llm, parse_json_safely
 from langchain_core.messages import SystemMessage, HumanMessage
 
 logger = logging.getLogger("master_agent")

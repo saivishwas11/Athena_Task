@@ -33,9 +33,9 @@ except Exception:
 
 # Model id from config or env
 try:
-    from config import GROQ_MODEL  # type: ignore
+    from ..config import GROQ_MODEL  # type: ignore
 except Exception:
-    GROQ_MODEL = os.getenv("GROQ_MODEL", "gpt-4o-mini")
+    GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
 
 _API_LOCK = threading.Lock()
 _GROQ_API_KEY = os.getenv("GROQ_API_KEY")  # may be None

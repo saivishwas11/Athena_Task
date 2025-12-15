@@ -1,23 +1,21 @@
 from typing import TypedDict, Dict, Any
 from langgraph.graph import StateGraph, END
 
-from graph.state_types import PitchState
+from backend.graph.state_types import PitchState
 
 # agents (top-level package)
-from agents.audio_agent import audio_agent_node
-from agents.voice_agent import voice_agent_node
-from agents.asr_agent import asr_agent_node
+from backend.agents.audio_agent import audio_agent_node
+from backend.agents.voice_agent import voice_agent_node
+from backend.agents.asr_agent import asr_agent_node
 
 # content is top-level (not nested inside agents)
-from content.master_agent import master_agent_node
+from backend.content.master_agent import master_agent_node
 
 # sharks are top-level
-from sharks.visionary_shark import visionary_shark_node
-from sharks.finance_shark import finance_shark_node
-from sharks.customer_shark import customer_shark_node
-from sharks.skeptic_shark import skeptic_shark_node
-from sharks.shark_aggregator import shark_aggregator_node
-
+from backend.sharks.visionary_shark import visionary_shark_node
+from backend.sharks.finance_shark import finance_shark_node
+from backend.sharks.customer_shark import customer_shark_node
+from backend.sharks.skeptic_shark import skeptic_shark_node
 
 def build_graph():
     workflow = StateGraph(PitchState)
@@ -33,7 +31,6 @@ def build_graph():
     workflow.add_node("finance_shark", finance_shark_node)
     workflow.add_node("customer_shark", customer_shark_node)
     workflow.add_node("skeptic_shark", skeptic_shark_node)
-    workflow.add_node("shark_aggregator", shark_aggregator_node)
 
     # Flow: audio -> voice -> asr
     workflow.set_entry_point("audio_agent")
@@ -43,14 +40,12 @@ def build_graph():
     # ASR -> Master content agent
     workflow.add_edge("asr_agent", "master_agent")
 
-    # Sequential sharks: master -> visionary -> finance -> customer -> skeptic -> aggregator
+    # Sequential sharks: master -> visionary -> finance -> customer -> skeptic
     workflow.add_edge("master_agent", "visionary_shark")
     workflow.add_edge("visionary_shark", "finance_shark")
     workflow.add_edge("finance_shark", "customer_shark")
     workflow.add_edge("customer_shark", "skeptic_shark")
-    workflow.add_edge("skeptic_shark", "shark_aggregator")
-
-    workflow.add_edge("shark_aggregator", END)
+    workflow.add_edge("skeptic_shark", END)
 
     app = workflow.compile()
     return app

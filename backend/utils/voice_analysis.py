@@ -16,7 +16,7 @@ import librosa
 import logging
 from datetime import datetime
 
-from utils.asr import transcribe_audio_safe
+from backend.utils.asr import transcribe_audio_safe
 
 logger = logging.getLogger(__name__)
 

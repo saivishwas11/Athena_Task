@@ -1,7 +1,7 @@
 import logging
 from typing import Dict, Any
 
-from utils.asr import transcribe_audio_safe  # safer wrapper that normalizes errors
+from backend.utils.asr import transcribe_audio_safe  # safer wrapper that normalizes errors
 
 logger = logging.getLogger(__name__)
 

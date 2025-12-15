@@ -41,14 +41,14 @@ logger = logging.getLogger("final_main")
 # ------------------------------------------------------------------
 # Imports from your project
 # ------------------------------------------------------------------
-from utils.voice_analysis import analyze_voice
-from content.master_agent import run_master_agent
-from graph.state_types import PitchState
+from backend.utils.voice_analysis import analyze_voice
+from backend.content.master_agent import run_master_agent
+from backend.graph.state_types import PitchState
 
-from sharks.customer_shark import customer_shark_node
-from sharks.finance_shark import finance_shark_node
-from sharks.skeptic_shark import skeptic_shark_node
-from sharks.visionary_shark import visionary_shark_node
+from backend.sharks.customer_shark import customer_shark_node
+from backend.sharks.finance_shark import finance_shark_node
+from backend.sharks.skeptic_shark import skeptic_shark_node
+from backend.sharks.visionary_shark import visionary_shark_node
 
 
 # ------------------------------------------------------------------
