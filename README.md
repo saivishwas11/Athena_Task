@@ -1,5 +1,15 @@
 # SharkPitch AI - Shark Tank AI Pitch Analyzer
 
+## Project (Brief)
+SharkPitch AI is a multi-agent AI system that provides comprehensive pitch evaluation by analyzing both vocal delivery and business content, offering entrepreneurs Shark Tank-style feedback to refine their pitches and increase their chances of securing investment.
+
+## Value Created
+- **For Entrepreneurs**: Actionable, objective feedback on both delivery and content, helping them refine their pitches like never before
+- **For Investors**: Higher quality, more polished pitches to evaluate, saving time and increasing deal flow efficiency
+- **For the Ecosystem**: Democratizes access to high-quality pitch coaching, particularly benefiting underrepresented founders who may lack access to experienced mentors
+- **Innovation Impact**: First-of-its-kind integration of vocal analysis with business content evaluation, setting a new standard in pitch preparation
+
+## Overview
 A full-stack application for analyzing startup pitches using AI-powered multi-agent systems. The project consists of a Python backend for pitch analysis and a React frontend for visualization.
 
 ## Project Structure
