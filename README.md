@@ -1,11 +1,11 @@
-# Athena Task - Shark Tank AI Pitch Analyzer
+# SharkPitch AI - Shark Tank AI Pitch Analyzer
 
 A full-stack application for analyzing startup pitches using AI-powered multi-agent systems. The project consists of a Python backend for pitch analysis and a React frontend for visualization.
 
 ## Project Structure
 
 ```
-Athena_Task/
+SharkPitch AI/
 ├── backend/              # Python backend application
 │   ├── agents/          # Multi-agent system components
 │   ├── content/         # Content analysis agents
